@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <ce-my-custom-component></ce-my-custom-component>
+    <hr />
+    <ce-my-shadow-custom-component></ce-my-shadow-custom-component>
+    <hr />
+    <ce-my-shadow-template-custom-component></ce-my-shadow-template-custom-component>
+
+    <template id="custom-template">
+      <style>
+        h1 {
+          color: orange;
+        }
+      </style>
+      <h1>MyShadowTemplateCustomComponent</h1>
+    </template>
+
+    <script>
+      class MyCustomComponent extends HTMLElement {
+        constructor() {
+          super();
+          console.log("MyCustomComponent");
+        }
+
+        connectedCallback() {
+          this.innerHTML = "<h1>MyCustomComponent</h1>";
+        }
+      }
+
+      class MyShadowCustomComponent extends HTMLElement {
+        constructor() {
+          super();
+          const shadow = this.attachShadow({ mode: "open" });
+          const title = document.createElement("h1");
+          title.textContent = "MyShadowCustomComponent";
+          shadow.appendChild(title);
+        }
+      }
+
+      class MyShadowTemplateCustomComponent extends HTMLElement {
+        constructor() {
+          super();
+          const template = document.querySelector("#custom-template");
+          const clonedTemplate = document.importNode(template.content, true);
+          const shadow = this.attachShadow({ mode: "open" });
+          shadow.appendChild(clonedTemplate);
+        }
+      }
+
+      customElements.define("ce-my-custom-component", MyCustomComponent);
+      customElements.define(
+        "ce-my-shadow-custom-component",
+        MyShadowCustomComponent
+      );
+      customElements.define(
+        "ce-my-shadow-template-custom-component",
+        MyShadowTemplateCustomComponent
+      );
+    </script>
+  </body>
+</html>
